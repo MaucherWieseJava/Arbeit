@@ -1,8 +1,12 @@
-import org.mindrot.jbcrypt.BCrypt;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 
-public class newHash {
+
+public class altHash {
     public static void main(String[] args){
-        String[] passwords = new String[]{"password1", "password2", "password3",
+        String[] passworts = new String[]{"password1", "password2", "password3",
                 "password4", "password5", "password6", "password7", "password8",
                 "password9", "password10", "password11", "password12", "password13",
                 "password14", "password15", "password16", "password17", "password18",
@@ -46,26 +50,41 @@ public class newHash {
                 "password200"
 
         };
-        public static void hash(String[] password){
-            Instant start = Instant.now();
-            String[] hashed = new String[200];
-            for(int i = 0; i < 200; i++){
+        hach(passworts);
 
 
+    }
+    public static void hach(String[] passwort){
+        Instant start = Instant.now();
+        String[] hached = new String[200];
+        for(int j = 0; j < passwort.length; j ++){
+            hached[j] = hashPassword(passwort[j]);
+            System.out.println("Ursprüngliches Passwort: " + passwort[j] + " Gehashtes Passwort: " + hached[j]);
+
+
+
+        }
+        Instant end = Instant.now();
+        System.out.println("Elapsed time: " + java.time.Duration.between(start, end).toMillis() + " millisekunden");
+
+
+
+
+
+
+    }
+
+    private static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
             }
-
-
-
-
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
-
-        }
-
-
-
+    }
 }
-/**
-
-Instant start = Instant.now();
-Instant end = Instant.now();
-            System.out.println("Elapsed time: " + java.time.Duration.between(start, end).toMillis() + "millisekunden");
